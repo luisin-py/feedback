@@ -11,7 +11,11 @@ services:
       ls -la
       echo "=== Verificando arquivo Python ==="
       ls -l *.py
-    startCommand: gunicorn --pythonpath . feedback_server:app
+    startCommand: |
+      echo "Verificando arquivo feedback_server.py..."
+      ls -l feedback_server.py
+      echo "Iniciando aplicação..."
+      gunicorn --pythonpath /opt/render/project/src feedback_server:app
     envVars:
       - key: CSV_PATH
         value: /data/feedbacks.csv
