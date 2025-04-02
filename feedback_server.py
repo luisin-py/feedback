@@ -6,7 +6,12 @@ import os
 
 print(f"Current working directory: {os.getcwd()}")
 print(f"Files in directory: {os.listdir()}")
+print("=== Verificando ambiente ===")
+print(f"Arquivos no diretório: {os.listdir()}")
+print(f"Diretório atual: {os.getcwd()}")
+
 app = Flask(__name__)
+print("Aplicação Flask criada com sucesso!")
 CORS(app, resources={r"/submit_feedback": {"origins": "*"}})
 
 # Configure for production
