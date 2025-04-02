@@ -3,21 +3,21 @@ services:
     name: feedback-api
     runtime: python
     buildCommand: |
+      echo "=== Usando Procfile ==="
+      cat Procfile
       pip install -r requirements.txt
-      echo "=== Estrutura de diretórios após build ==="
-      ls -l
-      echo "=== Conteúdo do diretório atual ==="
-      pwd
+      echo "=== Arquivos no diretório ==="
       ls -la
-      echo "=== Verificando arquivo Python ==="
-      ls -l *.py
     startCommand: |
-      echo "Verificando arquivo feedback_server.py..."
-      ls -l feedback_server.py
-      echo "Iniciando aplicação..."
-      gunicorn --pythonpath /opt/render/project/src feedback_server:app
+      echo "=== Verificando configuração ==="
+      echo "Arquivo feedback_server.py existe? $(ls feedback_server.py 2>/dev/null && echo Sim || echo Não)"
+      echo "Conteúdo do Procfile:"
+      cat Procfile
+      echo "Executando aplicação conforme Procfile..."
+      gunicorn --pythonpath . feedback_server:app
     envVars:
       - key: CSV_PATH
         value: /data/feedbacks.csv
       - key: PORT
         value: 8000
+    useProcfile: true  # Força o uso do Procfile
