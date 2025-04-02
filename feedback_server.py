@@ -1,20 +1,24 @@
-
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 from datetime import datetime
 import os
 
+print(f"Current working directory: {os.getcwd()}")
+print(f"Files in directory: {os.listdir()}")
 app = Flask(__name__)
+CORS(app, resources={r"/submit_feedback": {"origins": "*"}})
 
-# Caminho para o arquivo CSV
-FEEDBACK_FILE = 'feedbacks.csv'
+# Configure for production
+PORT = int(os.getenv('PORT', 5000))
+CSV_PATH = os.getenv('CSV_PATH', 'feedbacks.csv')
 
 # Criar DataFrame vazio se o arquivo não existir
-if not os.path.exists(FEEDBACK_FILE):
+if not os.path.exists(CSV_PATH):
     df = pd.DataFrame(columns=['timestamp', 'rating', 'comment', 'name', 'email'])
-    df.to_csv(FEEDBACK_FILE, index=False)
+    df.to_csv(CSV_PATH, index=False)
 else:
-    df = pd.read_csv(FEEDBACK_FILE)
+    df = pd.read_csv(CSV_PATH)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -36,7 +40,7 @@ def submit_feedback():
         df = pd.concat([df, pd.DataFrame([new_feedback])], ignore_index=True)
         
         # Salvar no arquivo CSV
-        df.to_csv(FEEDBACK_FILE, index=False)
+        df.to_csv(CSV_PATH, index=False)
         
         return jsonify({'status': 'success', 'message': 'Feedback recebido!'}), 200
     
@@ -44,4 +48,5 @@ def submit_feedback():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
