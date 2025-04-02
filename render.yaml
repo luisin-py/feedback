@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: feedback-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn feedback_server:app
+    envVars:
+      - key: CSV_PATH
+        value: /data/feedbacks.csv
+      - key: PORT
+        value: 8000
