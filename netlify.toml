@@ -1,0 +1,23 @@
+[build]
+  command = "echo 'Frontend built'"
+  publish = "."
+  functions = "functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://your-render-app.onrender.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+[[redirects]]
+  from = "/success.html"
+  to = "/success.html"
+  status = 200
+
+[build.environment]
+  API_URL = "https://your-render-app.onrender.com"
