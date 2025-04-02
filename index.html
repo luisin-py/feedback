@@ -17,7 +17,7 @@
 <body class="bg-gray-50 min-h-screen">
     <div class="container mx-auto px-4 py-12 max-w-3xl">
         <div class="bg-white rounded-xl shadow-md overflow-hidden p-8">
-            <form name="feedback" netlify netlify-honeypot="bot-field" action="/success.html">
+            <form name="feedback" method="POST" netlify netlify-honeypot="bot-field" data-netlify="true" action="/success.html">
                 <input type="hidden" name="form-name" value="feedback">
                 <p class="hidden">
                     <label>Não preencha: <input name="bot-field"></label>
@@ -79,7 +79,47 @@
                     </div>
                 </div>
             </form>
+            <script>
+                if (window.location.search.includes('success=true')) {
+                    window.location.href = '/success.html';
+                }
+            </script>
         </div>
     </div>
+    <div id="error-message" class="hidden fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg"></div>
+    <script>
+        const form = document.querySelector('form');
+        const errorMsg = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (e) => {
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Falha no envio');
+                
+                // Força o redirecionamento se o Netlify não redirecionar
+                setTimeout(() => {
+                    window.location.href = '/success.html';
+                }, 1000);
+                
+            } catch (error) {
+                errorMsg.textContent = 'Erro: ' + error.message;
+                errorMsg.classList.remove('hidden');
+                setTimeout(() => errorMsg.classList.add('hidden'), 5000);
+                console.error('Erro no envio:', error);
+            }
+        });
+
+        // Verifica parâmetro de sucesso na URL
+        if (new URLSearchParams(window.location.search).has('success')) {
+            window.location.href = '/success.html';
+        }
+    </script>
 </body>
 </html>
