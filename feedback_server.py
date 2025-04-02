@@ -15,8 +15,15 @@ print("Aplicação Flask criada com sucesso!")
 CORS(app, resources={r"/submit_feedback": {"origins": "*"}})
 
 # Configure for production
+print("=== Variáveis de Ambiente ===")
+print(f"PORT: {os.getenv('PORT', 'Não definido')}")
+print(f"CSV_PATH: {os.getenv('CSV_PATH', 'Não definido')}")
+
 PORT = int(os.getenv('PORT', 5000))
 CSV_PATH = os.getenv('CSV_PATH', 'feedbacks.csv')
+
+print(f"Usando PORT: {PORT}")
+print(f"Usando CSV_PATH: {CSV_PATH}")
 
 # Criar DataFrame vazio se o arquivo não existir
 if not os.path.exists(CSV_PATH):
