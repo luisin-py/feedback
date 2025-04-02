@@ -2,7 +2,15 @@ services:
   - type: web
     name: feedback-api
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
+      echo "=== Estrutura de diretórios após build ==="
+      ls -l
+      echo "=== Conteúdo do diretório atual ==="
+      pwd
+      ls -la
+      echo "=== Verificando arquivo Python ==="
+      ls -l *.py
     startCommand: gunicorn --pythonpath . feedback_server:app
     envVars:
       - key: CSV_PATH
