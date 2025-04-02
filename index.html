@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback dos Clientes</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            cursor: pointer;
+            font-size: 2rem;
+            color: #e2e8f0;
+            transition: all 0.2s ease;
+        }
+        .rating input:checked ~ label {
+            color: #f59e0b;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Deixe seu Feedback</h1>
+                <p class="text-gray-600">Sua opinião nos ajuda a melhorar nossos serviços</p>
+            </div>
+
+            <form id="feedbackForm" class="space-y-6">
+                <!-- Rating -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Avaliação</label>
+                    <div class="rating flex justify-center space-x-2">
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
+
+                <!-- Comment -->
+                <div>
+                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Comentário</label>
+                    <textarea id="comment" name="comment" rows="4" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                        placeholder="O que você achou do nosso serviço?" required></textarea>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nome (opcional)</label>
+                        <input type="text" id="name" name="name" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                            placeholder="Seu nome">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email (opcional)</label>
+                        <input type="email" id="email" name="email" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                            placeholder="seu@email.com">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button type="submit" 
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                        <i class="fas fa-paper-plane mr-2"></i> Enviar Feedback
+                    </button>
+                </div>
+            </form>
+
+            <!-- Thank You Message (hidden by default) -->
+            <div id="thankYouMessage" class="hidden text-center py-12">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                    <i class="fas fa-check text-green-600 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Obrigado pelo seu feedback!</h2>
+                <p class="text-gray-600">Sua opinião é muito importante para nós.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validação simples
+            const comment = document.getElementById('comment').value;
+            if (!comment) {
+                alert('Por favor, insira seu comentário.');
+                return;
+            }
+
+            // Coletar dados do formulário
+            const formData = {
+                rating: document.querySelector('input[name="rating"]:checked')?.value || 0,
+                comment: comment,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value
+            };
+
+            try {
+                // Enviar para o servidor Python
+                const response = await fetch('http://localhost:5000/submit_feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Mostrar mensagem de sucesso
+                    document.getElementById('feedbackForm').classList.add('hidden');
+                    document.getElementById('thankYouMessage').classList.remove('hidden');
+                    
+                    // Resetar formulário após 3 segundos
+                    setTimeout(() => {
+                        document.getElementById('feedbackForm').reset();
+                        document.getElementById('feedbackForm').classList.remove('hidden');
+                        document.getElementById('thankYouMessage').classList.add('hidden');
+                    }, 3000);
+                } else {
+                    alert(`Erro: ${result.message}`);
+                }
+            } catch (error) {
+                alert('Erro ao enviar feedback. Tente novamente.');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
