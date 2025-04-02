@@ -16,5 +16,23 @@
             <i class="fas fa-arrow-left mr-2"></i> Voltar ao formulário
         </a>
     </div>
+    <script>
+        // Mostra contagem regressiva
+        let seconds = 5;
+        const countdown = document.createElement('p');
+        countdown.className = 'text-gray-500 mt-4';
+        countdown.textContent = `Redirecionando em ${seconds} segundos...`;
+        document.querySelector('div').appendChild(countdown);
+
+        // Atualiza contagem e redireciona
+        const timer = setInterval(() => {
+            seconds--;
+            countdown.textContent = `Redirecionando em ${seconds} segundos...`;
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = '/index.html';
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
