@@ -1,1 +1,1 @@
-web: gunicorn feedback_server:app
+web: gunicorn --pythonpath . feedback_server:app
