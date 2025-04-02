@@ -28,3 +28,7 @@
  
  [build.environment]
    API_URL = "https://your-render-app.onrender.com"
+
+[[plugins]]
+  package = "@netlify/plugin-forms"
+
