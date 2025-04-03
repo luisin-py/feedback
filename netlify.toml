@@ -1,13 +1,6 @@
 [build]
-  command = "echo 'Build completo'"
   publish = "."
+  command = "npm install && npm run build"
 
 [[plugins]]
   package = "@netlify/plugin-forms"
-    [plugins.inputs]
-    enable = true
-
-[[redirects]]
-  from = "/submitted"
-  to = "/?success=true"
-  status = 200
