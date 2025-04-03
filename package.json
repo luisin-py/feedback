@@ -2,7 +2,10 @@
   "name": "meu-site",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "echo 'Build completo'"
+  },
   "dependencies": {
-    "@netlify/plugin-forms": "^1.0.0"
+    "@netlify/plugin-forms": "latest"
   }
 }
