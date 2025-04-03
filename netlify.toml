@@ -1,30 +1,13 @@
 [build]
-    command = "echo 'Frontend built'"
-    publish = "."
-    functions = "functions"
- 
-  [[redirects]]
-    from = "/api/*"
-    to = "https://your-render-app.onrender.com/:splat"
-    status = 200
-    force = true
- 
-  [[redirects]]
-    from = "/*"
-    to = "/index.html"
-    status = 200
- 
-  [[redirects]]
-    from = "/success"
-    to = "/success.html"
-    status = 200
-    force = true
- 
-  [[redirects]]
-    from = "/success.html"
-    to = "/success.html"
-    status = 200
-    force = true
- 
-  [build.environment]
-    API_URL = "https://your-render-app.onrender.com"
+  command = "echo 'Build completo'"
+  publish = "."
+
+[[plugins]]
+  package = "@netlify/plugin-forms"
+    [plugins.inputs]
+    enable = true
+
+[[redirects]]
+  from = "/submitted"
+  to = "/?success=true"
+  status = 200
