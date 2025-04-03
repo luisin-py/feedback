@@ -1,6 +1,3 @@
 [build]
   publish = "."
-  command = "npm install && npm run build"
-
-[[plugins]]
-  package = "@netlify/plugin-forms"
+  command = "npm install --force && npm run build"
