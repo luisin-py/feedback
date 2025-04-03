@@ -4,8 +4,5 @@
   "private": true,
   "scripts": {
     "build": "echo 'Build completo'"
-  },
-  "dependencies": {
-    "@netlify/plugin-forms": "latest"
   }
 }
